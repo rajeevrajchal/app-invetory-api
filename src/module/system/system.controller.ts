@@ -27,7 +27,7 @@ export class SystemController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.systemService.findOne(+id);
+    return this.systemService.findOne(id);
   }
 
   @Patch(':id')
@@ -38,5 +38,13 @@ export class SystemController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.systemService.remove(+id);
+  }
+
+  @Post(':id/add-subsystem')
+  add_sub_system(
+    @Param('id') id: string,
+    @Body() createSystemDto: CreateSystemDto,
+  ) {
+    return this.systemService.addSubSystem(id, createSystemDto);
   }
 }

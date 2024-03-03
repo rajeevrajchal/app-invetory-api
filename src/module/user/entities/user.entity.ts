@@ -1,5 +1,6 @@
 import { BaseDB } from '@base/base-db.entity';
-import { Column, Entity } from 'typeorm';
+import { System } from '@module/system/entities/system.entity';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { USER_ROLE } from '../enum/user-role.enum';
 
 @Entity('users')
@@ -31,20 +32,31 @@ export class User extends BaseDB {
   @Column({ default: true })
   isActive: boolean;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   otp: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   otp_expiry: Date;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   refresh_token: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   reset_token: string;
 
   @Column({
     default: false,
   })
   is_temp: boolean;
+
+  @OneToMany(() => System, (system) => system.user)
+  systems: System[];
 }
