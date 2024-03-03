@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "baseUrl": ".",
+    "paths": {
+      "#root/*": ["."],
+      "@*": ["./src/*"],
+      "@base/*": ["./src/base/*"],
+      "@constants/*": ["./src/constants/*"],
+      "@module/*": ["./src/module/*"],
+      "@decorators/*": ["./src/decorators/*"],
+      "@jobs/*": ["./src/jobs/*"],
+      "@enum/*": ["./src/enum/*"],
+      "@mail/*": ["./src/mail/*"]
+    }
+  },
+  "include": ["src"]
+}
