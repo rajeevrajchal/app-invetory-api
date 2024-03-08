@@ -47,7 +47,7 @@ export class System extends BaseDB {
     enum: SYSTEM_STATUS,
     default: SYSTEM_STATUS.DRAFT,
   })
-  role: SYSTEM_STATUS;
+  status: SYSTEM_STATUS;
 
   // relations
   @ManyToOne(() => User, (user) => user.systems)

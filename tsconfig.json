@@ -26,7 +26,10 @@
       "@decorators/*": ["./src/decorators/*"],
       "@jobs/*": ["./src/jobs/*"],
       "@enum/*": ["./src/enum/*"],
-      "@mail/*": ["./src/mail/*"]
+      "@mail/*": ["./src/mail/*"],
+      "@exception/*": ["./src/exception/*"],
+      "@guard/*": ["./src/middleware/guard/*"],
+      "@strategy/*": ["./src/middleware/strategy/*"]
     }
   },
   "include": ["src"]

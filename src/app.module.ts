@@ -1,10 +1,12 @@
+import { AllExceptionsFilter } from '@exception/exception';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_FILTER } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
-import { UserModule } from './module/user/user.module';
-import { SystemModule } from './module/system/system.module';
 import { AuthModule } from './module/auth/auth.module';
+import { SystemModule } from './module/system/system.module';
+import { UserModule } from './module/user/user.module';
 
 @Module({
   imports: [
@@ -35,6 +37,11 @@ import { AuthModule } from './module/auth/auth.module';
     AuthModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
+  ],
 })
 export class AppModule {}
