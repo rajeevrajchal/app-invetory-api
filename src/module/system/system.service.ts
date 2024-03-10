@@ -40,7 +40,6 @@ export class SystemService {
         id: id,
       },
     });
-    console.log('parent_system', parent_system.id);
     const system = this.systemRepository.create({
       ...createSystemDto,
       isParent: false,

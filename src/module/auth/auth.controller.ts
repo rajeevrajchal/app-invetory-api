@@ -1,7 +1,7 @@
 import { LocalAuthGuard } from '@guard/local-auth.guard';
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { GoogleAuthGuard } from '@middleware/guard/google-auth.guard';
+import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginDto } from './dto/login.dto';
 
 @Controller()
 export class AuthController {
@@ -9,7 +9,21 @@ export class AuthController {
 
   @Post('login')
   @UseGuards(LocalAuthGuard)
-  login(@Body() login_input: LoginDto, @Req() req): Promise<any> {
-    return this.authService.login(req);
+  login(@Req() req): Promise<any> {
+    return this.authService.login({ req });
+  }
+
+  @Get('google/login')
+  google(): Promise<any> {
+    return this.authService.google_login();
+  }
+
+  @Get('google/callback')
+  @UseGuards(GoogleAuthGuard)
+  google_callback(@Req() req): Promise<any> {
+    return this.authService.login({
+      req: req,
+      isOAuth: true,
+    });
   }
 }

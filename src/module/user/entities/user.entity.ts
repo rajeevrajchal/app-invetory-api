@@ -16,10 +16,10 @@ export class User extends BaseDB {
   email: string;
 
   @Column({
-    nullable: false,
+    nullable: true,
     default: '',
   })
-  password: string;
+  password?: string;
 
   @Column({
     nullable: false,
@@ -41,6 +41,16 @@ export class User extends BaseDB {
     nullable: true,
   })
   otp_expiry: Date;
+
+  @Column({
+    nullable: true,
+  })
+  auth_provider: string;
+
+  @Column({
+    nullable: true,
+  })
+  auth_provider_id: string;
 
   @Column({
     nullable: true,

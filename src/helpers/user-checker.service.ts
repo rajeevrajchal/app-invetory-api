@@ -17,6 +17,12 @@ export class UserCheckerService {
     });
   }
 
+  async checkUserExistByAuthProvider(auth_provider_id: string): Promise<any> {
+    return this.userRepository.findOneBy({
+      auth_provider_id: auth_provider_id,
+    });
+  }
+
   async checkUserExistById(id: string): Promise<any> {
     return this.userRepository.findOneBy({
       id: id,

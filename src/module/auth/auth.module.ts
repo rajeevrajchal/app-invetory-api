@@ -1,5 +1,6 @@
 import { UserCheckerService } from '@helpers/user-checker.service';
 import { ValidateUser } from '@helpers/validate-user.service';
+import { GoogleStrategy } from '@middleware/strategy/google.strategy';
 import { LocalStrategy } from '@middleware/strategy/local.strategy';
 import { User } from '@module/user/entities/user.entity';
 import { Module } from '@nestjs/common';
@@ -27,6 +28,12 @@ import { AuthService } from './auth.service';
     PassportModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, ValidateUser, UserCheckerService, LocalStrategy],
+  providers: [
+    AuthService,
+    ValidateUser,
+    UserCheckerService,
+    LocalStrategy,
+    GoogleStrategy,
+  ],
 })
 export class AuthModule {}
