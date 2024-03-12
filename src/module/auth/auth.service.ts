@@ -20,9 +20,9 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  async login(payload: { req: any; isOAuth?: boolean }) {
+  async login(payload: { req: any; isOAuth?: boolean; res?: any }) {
     try {
-      const { req, isOAuth } = payload;
+      const { req, isOAuth, res } = payload;
       const user = req?.user || req?.userFromDBWithProvider;
 
       if (!user) {
@@ -38,11 +38,8 @@ export class AuthService {
       const access_token = this.jwtService.sign(tokenPayload);
 
       if (isOAuth) {
-        const link = `${this.configService.get<string>('FRONTEND_URL')}/login/?token=${access_token}`;
-        return {
-          messages: messages.login_success,
-          url: link,
-        };
+        const redirectUrl = `${this.configService.get<string>('FRONTEND_URL')}/auth/confirm?token=${access_token}`;
+        res.redirect(HttpStatus.FOUND, redirectUrl);
       }
       return {
         access_token: access_token,
@@ -81,6 +78,28 @@ export class AuthService {
         messages.login_error,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
+    }
+  }
+
+  async whoIAm(user: any): Promise<any> {
+    try {
+      return {
+        message: messages.fetch_success,
+        user,
+      };
+    } catch (error) {
+      throw new UnauthorizedException();
+    }
+  }
+
+  async logout(user: any): Promise<any> {
+    try {
+      return {
+        message: messages.logout_success,
+        user,
+      };
+    } catch (error) {
+      throw new UnauthorizedException();
     }
   }
 }
