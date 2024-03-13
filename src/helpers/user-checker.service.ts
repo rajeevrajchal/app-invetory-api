@@ -28,4 +28,14 @@ export class UserCheckerService {
       id: id,
     });
   }
+
+  async updateUserForOAuth(
+    id: string,
+    payload: {
+      auth_provider: string;
+      auth_provider_id: string;
+    },
+  ): Promise<any> {
+    return this.userRepository.update(id, payload);
+  }
 }

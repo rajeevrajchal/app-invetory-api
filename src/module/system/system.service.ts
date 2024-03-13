@@ -1,5 +1,5 @@
 import { User } from '@module/user/entities/user.entity';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateSystemDto } from './dto/create-system.dto';
@@ -15,23 +15,22 @@ export class SystemService {
     private userService: Repository<User>,
   ) {}
 
-  async create(createSystemDto: CreateSystemDto) {
-    const user = await this.userService.findOne({
-      where: {
-        id: createSystemDto.userId,
-      },
-    });
-    const system = this.systemRepository.create({
-      ...createSystemDto,
-      isParent: true,
-      user: user,
-    });
-    const new_system = await this.systemRepository.save(system);
+  async create(createSystemDto: CreateSystemDto, user: any) {
+    try {
+      const system = this.systemRepository.create({
+        ...createSystemDto,
+        isParent: true,
+        user: user,
+      });
+      const new_system = await this.systemRepository.save(system);
 
-    return {
-      message: 'system created',
-      system: new_system,
-    };
+      return {
+        message: 'system created',
+        system: new_system,
+      };
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
   }
 
   async addSubSystem(id, createSystemDto: CreateSystemDto) {
@@ -53,13 +52,25 @@ export class SystemService {
     };
   }
 
-  findAll() {
+  findAll(user: User) {
     return this.systemRepository.find({
       where: {
         deletedAt: null,
         isParent: true,
+        user: {
+          id: user.id,
+        },
       },
-      relations: ['user', 'subSystems'],
+      select: {
+        user: {
+          id: true,
+          name: true,
+        },
+      },
+      relations: {
+        user: true,
+        subSystems: true,
+      },
     });
   }
 
@@ -67,6 +78,12 @@ export class SystemService {
     return this.systemRepository.findOne({
       where: {
         id: id,
+      },
+      select: {
+        user: {
+          id: true,
+          name: true,
+        },
       },
       relations: ['user', 'subSystems', 'features'],
     });

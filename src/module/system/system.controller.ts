@@ -1,3 +1,6 @@
+import { CurrentUser } from '@decorators/current-user.decorator';
+import { JwtAuthGuard } from '@middleware/guard/jwt-auth.guard';
+import { User } from '@module/user/entities/user.entity';
 import {
   Body,
   Controller,
@@ -6,23 +9,25 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateSystemDto } from './dto/create-system.dto';
 import { UpdateSystemDto } from './dto/update-system.dto';
 import { SystemService } from './system.service';
 
 @Controller('system')
+@UseGuards(JwtAuthGuard)
 export class SystemController {
   constructor(private readonly systemService: SystemService) {}
 
   @Post()
-  create(@Body() createSystemDto: CreateSystemDto) {
-    return this.systemService.create(createSystemDto);
+  create(@CurrentUser() user: User, @Body() createSystemDto: CreateSystemDto) {
+    return this.systemService.create(createSystemDto, user);
   }
 
   @Get()
-  findAll() {
-    return this.systemService.findAll();
+  findAll(@CurrentUser() user: User) {
+    return this.systemService.findAll(user);
   }
 
   @Get(':id')

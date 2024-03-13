@@ -1,6 +1,6 @@
 export enum SYSTEM_STATUS {
-  SUSPEND = 'admin',
-  ACTIVE = 'manager',
+  SUSPEND = 'suspend',
+  ACTIVE = 'active',
   ON_HOLD = 'on_hold',
   DRAFT = 'draft',
 }
