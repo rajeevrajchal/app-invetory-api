@@ -37,10 +37,14 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       const userFromDBWithPassword: User =
         await this.userCheckService.checkUserExist(google_user.email);
       if (userFromDBWithPassword) {
-        this.userCheckService.updateUserForOAuth(userFromDBWithPassword.id, {
-          auth_provider: 'google',
-          auth_provider_id: id,
-        });
+        await this.userCheckService.updateUserForOAuth(
+          userFromDBWithPassword.id,
+          {
+            auth_provider: 'google',
+            auth_provider_id: id,
+          },
+        );
+        return userFromDBWithPassword;
       } else {
         throw new UnauthorizedException(messages.login_error);
       }
