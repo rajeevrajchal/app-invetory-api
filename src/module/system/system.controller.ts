@@ -9,6 +9,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { CreateSystemDto } from './dto/create-system.dto';
@@ -26,8 +27,8 @@ export class SystemController {
   }
 
   @Get()
-  findAll(@CurrentUser() user: User) {
-    return this.systemService.findAll(user);
+  findAll(@CurrentUser() user: User, @Query() query: any) {
+    return this.systemService.findAll(user, query);
   }
 
   @Get(':id')
@@ -37,12 +38,17 @@ export class SystemController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateSystemDto: UpdateSystemDto) {
-    return this.systemService.update(+id, updateSystemDto);
+    return this.systemService.update(id, updateSystemDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.systemService.remove(+id);
+    return this.systemService.remove(id);
+  }
+
+  @Patch(':id/re-store')
+  restore(@Param('id') id: string) {
+    return this.systemService.restore(id);
   }
 
   @Post(':id/add-subsystem')
