@@ -5,5 +5,9 @@ const messages = {
   email_password_invalid: 'Email Or Password Invalid',
   fetch_success: 'Fetch Success',
   logout_success: 'Logout Success',
+
+  system_updated: 'System Updated',
+  record_deleted: 'Deleted Successful',
+  record_restored: 'Row Restored',
 };
 export default messages;

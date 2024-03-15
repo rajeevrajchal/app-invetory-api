@@ -1,19 +1,22 @@
+import { BaseService } from '@base/base.service';
+import messages from '@constants/message';
 import { User } from '@module/user/entities/user.entity';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, IsNull, Not, Repository } from 'typeorm';
 import { CreateSystemDto } from './dto/create-system.dto';
 import { UpdateSystemDto } from './dto/update-system.dto';
 import { System } from './entities/system.entity';
+import { SYSTEM_STATUS } from './enum/system-status.enum';
 
 @Injectable()
-export class SystemService {
+export class SystemService extends BaseService<System> {
   constructor(
     @InjectRepository(System)
     private systemRepository: Repository<System>,
-    @InjectRepository(User)
-    private userService: Repository<User>,
-  ) {}
+  ) {
+    super(systemRepository);
+  }
 
   async create(createSystemDto: CreateSystemDto, user: any) {
     try {
@@ -52,48 +55,91 @@ export class SystemService {
     };
   }
 
-  findAll(user: User) {
-    return this.systemRepository.find({
-      where: {
-        deletedAt: null,
+  async findAll(user: User, query: any): Promise<System[]> {
+    try {
+      const { type } = query;
+      const find_query = {
+        select: {
+          user: {
+            id: true,
+            name: true,
+          },
+        },
+        relations: ['user', 'subSystems'],
+      };
+      const whereCondition = {
         isParent: true,
         user: {
           id: user.id,
         },
-      },
-      select: {
-        user: {
-          id: true,
-          name: true,
+      };
+
+      // making query work
+      if (type === 'archived') {
+        return await this.systemRepository.find({
+          withDeleted: true,
+          where: {
+            isParent: true,
+            deletedAt: Not(IsNull()),
+            user: {
+              id: user.id,
+            },
+          },
+          ...find_query,
+        });
+      } else if (type === 'on_hold') {
+        whereCondition['deletedAt'] = IsNull();
+        whereCondition['status'] = type;
+      } else {
+        whereCondition['deletedAt'] = IsNull();
+        whereCondition['status'] = In([
+          SYSTEM_STATUS.DRAFT,
+          SYSTEM_STATUS.ACTIVE,
+        ]);
+      }
+
+      return await this.systemRepository.find({
+        where: whereCondition,
+        ...find_query,
+      });
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async findOne(id: string) {
+    try {
+      return this.systemRepository.findOne({
+        where: {
+          id: id,
         },
-      },
-      relations: {
-        user: true,
-        subSystems: true,
-      },
-    });
-  }
-
-  findOne(id: string) {
-    return this.systemRepository.findOne({
-      where: {
-        id: id,
-      },
-      select: {
-        user: {
-          id: true,
-          name: true,
+        select: {
+          user: {
+            id: true,
+            name: true,
+          },
         },
-      },
-      relations: ['user', 'subSystems', 'features'],
-    });
+        relations: ['user', 'subSystems', 'features'],
+      });
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.NOT_FOUND);
+    }
   }
 
-  update(id: number, updateSystemDto: UpdateSystemDto) {
-    return `This action updates a #${id} system`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} system`;
+  async update(id: string, updateSystemDto: UpdateSystemDto) {
+    try {
+      const system = await this.findOne(id);
+      if (!system) {
+        throw new HttpException('system not found', HttpStatus.NOT_FOUND);
+      }
+      this.systemRepository.merge(system, updateSystemDto);
+      const updated_system = await this.systemRepository.save(system);
+      return {
+        messages: messages.system_updated,
+        system: updated_system,
+      };
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
   }
 }
