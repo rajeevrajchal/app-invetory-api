@@ -50,12 +50,4 @@ export class SystemController {
   restore(@Param('id') id: string) {
     return this.systemService.restore(id);
   }
-
-  @Post(':id/add-subsystem')
-  add_sub_system(
-    @Param('id') id: string,
-    @Body() createSystemDto: CreateSystemDto,
-  ) {
-    return this.systemService.addSubSystem(id, createSystemDto);
-  }
 }

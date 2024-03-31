@@ -1,29 +1,30 @@
-import { BaseService } from '@base/base.service';
-import messages from '@constants/message';
 import { User } from '@module/user/entities/user.entity';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, IsNull, Not, Repository } from 'typeorm';
-import { CreateSystemDto } from './dto/create-system.dto';
-import { UpdateSystemDto } from './dto/update-system.dto';
-import { System } from './entities/system.entity';
-import { SYSTEM_STATUS } from './enum/system-status.enum';
+import { CreateSystemDto } from '../dto/create-system.dto';
+import { System } from '../entities/system.entity';
+import { SYSTEM_STATUS } from '../enum/system-status.enum';
 
 @Injectable()
-export class SystemService extends BaseService<System> {
+export class SubSystemService {
   constructor(
     @InjectRepository(System)
     private systemRepository: Repository<System>,
-  ) {
-    super(systemRepository);
-  }
+  ) {}
 
-  async create(createSystemDto: CreateSystemDto, user: any) {
+  async create(
+    createSystemDto: CreateSystemDto,
+    parent_system_id: string,
+    user: any,
+  ) {
     try {
       const system = this.systemRepository.create({
         ...createSystemDto,
-        isParent: true,
         user: user,
+        parent: {
+          id: parent_system_id,
+        },
       });
       const new_system = await this.systemRepository.save(system);
 
@@ -36,7 +37,11 @@ export class SystemService extends BaseService<System> {
     }
   }
 
-  async findAll(user: User, query: any): Promise<System[]> {
+  async findAll(
+    parent_system_id: string,
+    user: User,
+    query: any,
+  ): Promise<System[]> {
     try {
       const { type } = query;
       const find_query = {
@@ -49,7 +54,10 @@ export class SystemService extends BaseService<System> {
         relations: ['user', 'subSystems'],
       };
       const whereCondition = {
-        isParent: true,
+        isParent: false,
+        parent: {
+          id: parent_system_id,
+        },
         user: {
           id: user.id,
         },
@@ -60,7 +68,10 @@ export class SystemService extends BaseService<System> {
         return await this.systemRepository.find({
           withDeleted: true,
           where: {
-            isParent: true,
+            isParent: false,
+            parent: {
+              id: parent_system_id,
+            },
             deletedAt: Not(IsNull()),
             user: {
               id: user.id,
@@ -85,42 +96,6 @@ export class SystemService extends BaseService<System> {
       });
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
-
-  async findOne(id: string) {
-    try {
-      return this.systemRepository.findOne({
-        where: {
-          id: id,
-        },
-        select: {
-          user: {
-            id: true,
-            name: true,
-          },
-        },
-        relations: ['user', 'subSystems', 'features'],
-      });
-    } catch (error) {
-      throw new HttpException(error, HttpStatus.NOT_FOUND);
-    }
-  }
-
-  async update(id: string, updateSystemDto: UpdateSystemDto) {
-    try {
-      const system = await this.findOne(id);
-      if (!system) {
-        throw new HttpException('system not found', HttpStatus.NOT_FOUND);
-      }
-      this.systemRepository.merge(system, updateSystemDto);
-      const updated_system = await this.systemRepository.save(system);
-      return {
-        messages: messages.system_updated,
-        system: updated_system,
-      };
-    } catch (error) {
-      throw new HttpException(error, HttpStatus.UNPROCESSABLE_ENTITY);
     }
   }
 }
