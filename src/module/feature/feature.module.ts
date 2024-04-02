@@ -10,7 +10,7 @@ import { FeatureService } from './feature.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([System, Feature, User])],
-  providers: [FeatureService, JwtStrategy, UserCheckerService],
+  providers: [FeatureService, UserCheckerService, JwtStrategy],
   controllers: [FeatureController],
 })
 export class FeatureModule {}
