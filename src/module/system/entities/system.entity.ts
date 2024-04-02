@@ -2,8 +2,8 @@
 import { BaseDB } from '@base/base-db.entity';
 import { User } from '@module/user/entities/user.entity';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Feature } from '../../feature/entities/feature.entity';
 import { SYSTEM_STATUS } from '../enum/system-status.enum';
-import { Feature } from './feature.entity';
 
 @Entity('systems')
 export class System extends BaseDB {

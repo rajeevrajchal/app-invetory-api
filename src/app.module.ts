@@ -7,6 +7,7 @@ import { join } from 'path';
 import { AuthModule } from './module/auth/auth.module';
 import { SystemModule } from './module/system/system.module';
 import { UserModule } from './module/user/user.module';
+import { FeatureModule } from './module/feature/feature.module';
 
 @Module({
   imports: [
@@ -35,6 +36,8 @@ import { UserModule } from './module/user/user.module';
     SystemModule,
 
     AuthModule,
+
+    FeatureModule,
   ],
   controllers: [],
   providers: [
