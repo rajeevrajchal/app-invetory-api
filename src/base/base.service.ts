@@ -36,6 +36,7 @@ export class BaseService<T extends BaseDB> {
     try {
       const entity = await this.repository.findOne({
         where: { id: id as any },
+        withDeleted: true,
       });
       if (!entity) {
         throw new NotFoundException('Entity not found');
