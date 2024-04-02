@@ -1,3 +1,4 @@
+import { UserCheckerService } from '@helpers/user-checker.service';
 import { JwtStrategy } from '@middleware/strategy/jwt.strategy';
 import { System } from '@module/system/entities/system.entity';
 import { User } from '@module/user/entities/user.entity';
@@ -9,7 +10,7 @@ import { FeatureService } from './feature.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([System, Feature, User])],
-  providers: [FeatureService, JwtStrategy],
+  providers: [FeatureService, JwtStrategy, UserCheckerService],
   controllers: [FeatureController],
 })
 export class FeatureModule {}
