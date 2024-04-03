@@ -1,5 +1,5 @@
 import { BaseDB } from '@base/base-db.entity';
-import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { System } from '../../system/entities/system.entity';
 import { FEATURE_STATUS } from '../enum/feature.enum';
 
@@ -33,7 +33,7 @@ export class Feature extends BaseDB {
   status: FEATURE_STATUS;
 
   // relations
-  @OneToOne(() => System, (system) => system.features)
+  @ManyToOne(() => System, (system) => system.features)
   @JoinColumn({ name: 'system_id' })
   system: System;
 }
