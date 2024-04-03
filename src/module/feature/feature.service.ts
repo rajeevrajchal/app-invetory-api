@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateFeatureDto } from './dto/create-feature.dto';
 import { Feature } from './entities/feature.entity';
+import { FEATURE_STATUS } from './enum/feature.enum';
 
 @Injectable()
 export class FeatureService extends BaseService<Feature> {
@@ -31,7 +32,13 @@ export class FeatureService extends BaseService<Feature> {
 
   async create(createFeatureDto: CreateFeatureDto) {
     try {
-      const feature = this.featureRepository.create(createFeatureDto);
+      const feature = this.featureRepository.create({
+        ...createFeatureDto,
+        status: FEATURE_STATUS.DRAFT,
+        system: {
+          id: createFeatureDto.system_id,
+        },
+      });
       const new_feature = await this.featureRepository.save(feature);
 
       return {

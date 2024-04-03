@@ -1,4 +1,3 @@
-import { System } from '@module/system/entities/system.entity';
 import { IsBoolean, IsEmpty, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateFeatureDto {
@@ -14,5 +13,5 @@ export class CreateFeatureDto {
   is_active: boolean;
 
   @IsString()
-  system: Partial<System>;
+  system_id: string;
 }
