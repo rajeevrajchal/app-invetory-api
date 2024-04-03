@@ -1,4 +1,5 @@
 import { BaseService } from '@base/base.service';
+import messages from '@constants/message';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -32,6 +33,16 @@ export class FeatureService extends BaseService<Feature> {
 
   async create(createFeatureDto: CreateFeatureDto) {
     try {
+      console.log('the feature are', {
+        createFeatureDto,
+        val: {
+          ...createFeatureDto,
+          status: FEATURE_STATUS.DRAFT,
+          system: {
+            id: createFeatureDto.system_id,
+          },
+        },
+      });
       const feature = this.featureRepository.create({
         ...createFeatureDto,
         status: FEATURE_STATUS.DRAFT,
@@ -47,6 +58,36 @@ export class FeatureService extends BaseService<Feature> {
       };
     } catch (error) {
       throw new HttpException(error, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+  }
+
+  async findOne(id: string) {
+    try {
+      return this.featureRepository.findOne({
+        where: {
+          id: id,
+        },
+        relations: ['system'],
+      });
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.NOT_FOUND);
+    }
+  }
+
+  async enable_feature(id: string) {
+    try {
+      const feature = await this.findOne(id);
+      if (!feature) {
+        throw new HttpException(messages.not_found, HttpStatus.NOT_FOUND);
+      }
+
+      const updatedFeature = await this.featureRepository.update(id, {
+        is_active: !feature.is_active,
+      });
+
+      return updatedFeature;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.UNPROCESSABLE_ENTITY);
     }
   }
 }

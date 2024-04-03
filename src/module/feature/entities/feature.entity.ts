@@ -15,6 +15,7 @@ export class Feature extends BaseDB {
 
   @Column({
     nullable: true,
+    unique: false,
   })
   key: string;
 

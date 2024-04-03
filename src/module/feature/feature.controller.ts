@@ -1,5 +1,13 @@
 import { JwtAuthGuard } from '@middleware/guard/jwt-auth.guard';
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { CreateFeatureDto } from './dto/create-feature.dto';
 import { FeatureService } from './feature.service';
 
@@ -16,5 +24,10 @@ export class FeatureController {
   @Post()
   create(@Body() createFeatureDto: CreateFeatureDto) {
     return this.featureService.create(createFeatureDto);
+  }
+
+  @Patch('enable/:id')
+  enable_feature(@Param('id') id: string) {
+    return this.featureService.enable_feature(id);
   }
 }

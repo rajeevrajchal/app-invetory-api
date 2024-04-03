@@ -9,5 +9,6 @@ const messages = {
   system_updated: 'System Updated',
   record_deleted: 'Deleted Successful',
   record_restored: 'Row Restored',
+  not_found: 'Not Found',
 };
 export default messages;
