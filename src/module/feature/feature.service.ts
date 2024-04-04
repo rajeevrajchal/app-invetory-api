@@ -18,12 +18,19 @@ export class FeatureService extends BaseService<Feature> {
 
   async findSystemFeature(system_id: string) {
     try {
-      const features = this.featureRepository.find({
+      const features = await this.featureRepository.find({
         where: {
           system: {
             id: system_id,
           },
         },
+        select: {
+          system: {
+            id: true,
+            name: true,
+          },
+        },
+        relations: ['system'],
       });
       return features;
     } catch (error) {
