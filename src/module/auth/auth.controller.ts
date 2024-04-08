@@ -48,8 +48,9 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('logout')
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(JwtAuthGuard)
   async logout(@CurrentUser() user: any): Promise<any> {
+    console.log('the user is', user);
     return this.authService.logout(user);
   }
 }
