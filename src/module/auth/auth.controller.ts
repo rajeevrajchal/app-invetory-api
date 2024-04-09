@@ -50,7 +50,6 @@ export class AuthController {
   @Post('logout')
   @UseGuards(JwtAuthGuard)
   async logout(@CurrentUser() user: any): Promise<any> {
-    console.log('the user is', user);
     return this.authService.logout(user);
   }
 }
