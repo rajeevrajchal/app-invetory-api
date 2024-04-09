@@ -1,5 +1,6 @@
 import { BaseDB } from '@base/base-db.entity';
 import { System } from '@module/system/entities/system.entity';
+import { Vendor } from '@module/vendor/entities/vendor.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { USER_ROLE } from '../enum/user-role.enum';
 
@@ -69,4 +70,7 @@ export class User extends BaseDB {
 
   @OneToMany(() => System, (system) => system.user)
   systems: System[];
+
+  @OneToMany(() => Vendor, (system) => system.user)
+  vendors: Vendor[];
 }
