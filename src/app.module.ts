@@ -8,6 +8,8 @@ import { AuthModule } from './module/auth/auth.module';
 import { SystemModule } from './module/system/system.module';
 import { UserModule } from './module/user/user.module';
 import { FeatureModule } from './module/feature/feature.module';
+import { VendorModule } from './module/vendor/vendor.module';
+import { CustomerModule } from './module/customer/customer.module';
 
 @Module({
   imports: [
@@ -38,6 +40,10 @@ import { FeatureModule } from './module/feature/feature.module';
     AuthModule,
 
     FeatureModule,
+
+    VendorModule,
+
+    CustomerModule,
   ],
   controllers: [],
   providers: [
