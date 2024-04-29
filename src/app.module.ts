@@ -5,11 +5,13 @@ import { APP_FILTER } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { AuthModule } from './module/auth/auth.module';
+import { CustomerModule } from './module/customer/customer.module';
+import { FeatureModule } from './module/feature/feature.module';
 import { SystemModule } from './module/system/system.module';
 import { UserModule } from './module/user/user.module';
-import { FeatureModule } from './module/feature/feature.module';
 import { VendorModule } from './module/vendor/vendor.module';
-import { CustomerModule } from './module/customer/customer.module';
+import { WorkLogsModule } from './module/work_logs/work_logs.module';
+import { TeamsModule } from './module/teams/teams.module';
 
 @Module({
   imports: [
@@ -44,6 +46,10 @@ import { CustomerModule } from './module/customer/customer.module';
     VendorModule,
 
     CustomerModule,
+
+    WorkLogsModule,
+
+    TeamsModule,
   ],
   controllers: [],
   providers: [
