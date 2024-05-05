@@ -1,7 +1,8 @@
 import { BaseDB } from '@base/base-db.entity';
 import { System } from '@module/system/entities/system.entity';
 import { Vendor } from '@module/vendor/entities/vendor.entity';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { WorkLogs } from '@module/work_logs/entities/work_log.entity';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { USER_ROLE } from '../enum/user-role.enum';
 
 @Entity('users')
@@ -73,4 +74,7 @@ export class User extends BaseDB {
 
   @OneToMany(() => Vendor, (system) => system.user)
   vendors: Vendor[];
+
+  @ManyToOne(() => WorkLogs, (work_log) => work_log.user)
+  work_logs: WorkLogs[];
 }

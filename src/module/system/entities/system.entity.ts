@@ -1,6 +1,7 @@
 // system.entity.ts
 import { BaseDB } from '@base/base-db.entity';
 import { User } from '@module/user/entities/user.entity';
+import { WorkLogs } from '@module/work_logs/entities/work_log.entity';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { Feature } from '../../feature/entities/feature.entity';
 import { SYSTEM_STATUS } from '../enum/system-status.enum';
@@ -63,4 +64,7 @@ export class System extends BaseDB {
 
   @ManyToOne(() => Feature, (feature) => feature.system)
   features: Feature[];
+
+  @ManyToOne(() => WorkLogs, (feature) => feature.app)
+  work_log: WorkLogs[];
 }
