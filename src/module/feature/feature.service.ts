@@ -40,16 +40,6 @@ export class FeatureService extends BaseService<Feature> {
 
   async create(createFeatureDto: CreateFeatureDto) {
     try {
-      console.log('the feature are', {
-        createFeatureDto,
-        val: {
-          ...createFeatureDto,
-          status: FEATURE_STATUS.DRAFT,
-          system: {
-            id: createFeatureDto.system_id,
-          },
-        },
-      });
       const feature = this.featureRepository.create({
         ...createFeatureDto,
         status: FEATURE_STATUS.DRAFT,
