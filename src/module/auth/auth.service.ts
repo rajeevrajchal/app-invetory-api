@@ -38,7 +38,7 @@ export class AuthService {
       const access_token = this.jwtService.sign(tokenPayload);
 
       if (isOAuth) {
-        const redirectUrl = `${this.configService.get<string>('FRONTEND_URL')}/auth/confirm?token=${access_token}`;
+        const redirectUrl = `${this.configService.get<string>('FRONTEND_URL')}${this.configService.get<string>('REDIRECT_URL')}?token=${access_token}`;
         res.redirect(HttpStatus.FOUND, redirectUrl);
       }
       return {

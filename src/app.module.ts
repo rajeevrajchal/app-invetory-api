@@ -8,10 +8,10 @@ import { AuthModule } from './module/auth/auth.module';
 import { CustomerModule } from './module/customer/customer.module';
 import { FeatureModule } from './module/feature/feature.module';
 import { SystemModule } from './module/system/system.module';
+import { TeamsModule } from './module/teams/teams.module';
 import { UserModule } from './module/user/user.module';
 import { VendorModule } from './module/vendor/vendor.module';
 import { WorkLogsModule } from './module/work_logs/work_logs.module';
-import { TeamsModule } from './module/teams/teams.module';
 
 @Module({
   imports: [
@@ -25,7 +25,7 @@ import { TeamsModule } from './module/teams/teams.module';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DATABASE,
-      // entities: [join(__dirname, '**', '*.entity.{ts,js}')],
+      ssl: process.env.POSTGRES_SSL === 'true',
       entities: [
         join(__dirname, 'module', '**', '**', '**', '*.entity.{ts,js}'),
         join(__dirname, '**', '*.entity.{ts,js}'),
